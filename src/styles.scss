@@ -1,4 +1,35 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Setup theme color and default to dark theme */
+:root {
+  --tw-bg-opacity: 1;
+  --icon-size: 1.1rem;
+  --primary-color: #9A97F3;
+  --secondary-color: rgb(74 152 241);
+  --font-color: #e1e1ff;
+  --primary-bg-color: rgb(17 24 39 / var(--tw-bg-opacity));
+  --secondary-bg-color: rgb(31 41 55 / var(--tw-bg-opacity));
+  --heading-color: #818cab;
+}
+
+:is(.light body) {
+  --primary-bg-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  --secondary-bg-color: rgb(122 164 223 / var(--tw-bg-opacity));
+  --secondary-color: rgb(36, 56, 78);
+  --font-color: #353535;
+  --heading-color: #818cab;
+}
+
+:is(.dark body) {
+  --primary-bg-color: rgb(17 24 39 / var(--tw-bg-opacity));
+  --secondary-bg-color: rgb(31 41 55 / var(--tw-bg-opacity));
+  --primary-color: #9A97F3;
+  --secondary-color: rgb(74 152 241);
+  --font-color: #e1e1ff;
+  --heading-color: #818cab;
+}
+
+
 * {
   box-sizing: border-box;
 }
@@ -7,9 +38,22 @@ body {
   margin: 0;
   font-family: "Poppins", sans-serif;
   overflow-x: hidden;
+  background-color: var(--primary-bg-color);
 }
 
-:is(.dark body) {
-  --tw-bg-opacity: 1;
-  background-color: rgb(17 24 39 / var(--tw-bg-opacity));
+.button-plan {
+  padding: 0;
+  background: none;
+  background-color: transparent;
+  color: #ffffffa8;
+  border: none;
+  border-radius: 0.2rem;
+  &:hover{
+    background-color: #ffffff7a;
+  }
+  svg {
+    width: var(--icon-size);
+    height: var(--icon-size);
+    // padding: 2rem;
+  }
 }
