@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --base-href /Entertainment-site-Angular/",
     "postbuild": "cls & npm run clear & npm run deploy",
     "clear": "DEL /F /Q W:\\_github\\Entertainment-site-Angular\\main-*.js & DEL /F /Q W:\\_github\\Entertainment-site-Angular\\styles-*.css & DEL /F /Q W:\\_github\\Entertainment-site-Angular\\polyfills-*.js",
     "deploy": "robocopy D:\\PIM\\Me\\Software_Development\\WEB\\Entertainment-Angular\\dist\\entertainment-angular\\browser W:\\_github\\Entertainment-site-Angular /S /E",
