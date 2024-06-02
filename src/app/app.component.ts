@@ -1,4 +1,5 @@
-import { Component, ElementRef, OnInit, Renderer2, effect, inject, signal } from '@angular/core';
+import { DOCUMENT, NgClass } from '@angular/common';
+import { Component, ElementRef, Inject, Renderer2, ViewChild, computed, effect, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 // type ThemeMode = 'dark' | 'light' | 'os-default';
@@ -9,16 +10,21 @@ type ThemeMode = typeof ThemeMOdes[number];
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, NgClass],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   renderer = inject(Renderer2);
   el = inject(ElementRef);
 
+  @ViewChild('sideMenuIcon', { static: true })
+  // private sideMenuIcon: ElementRef;
   title = 'Entertainment';
   themeMode = signal<ThemeMode>('dark');
+
+  isSideMenuClosed = signal<boolean>(true);
+  menuCloseBtnClass = computed(() => this.isSideMenuClosed()?`bx bx-menu`:`bx bx-menu-alt-right`);
 
   sideBarNenus = [
     { name: 'RTHK', icon: 'bx bx-radio', link: 'rthk' },
@@ -26,15 +32,13 @@ export class AppComponent implements OnInit {
     { name: 'RTHK', icon: 'bx bxs-playlist', link: 'rthk' },
   ];
 
-  constructor() {
+  constructor(@Inject(DOCUMENT) private document: Document) {
     // Register a new effect.
     effect(() => {
       // Get root html tag from current element
       // const htmlTag = this.el.nativeElement.parentElement.parentElement;
 
-      if(!document) return;
-
-      const htmlTag = document.documentElement;
+      const htmlTag = this.document.documentElement;
       // Remove all theme from class attribute
       ThemeMOdes.forEach( theme => {
         this.renderer.removeClass(htmlTag, theme);
@@ -43,44 +47,15 @@ export class AppComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-
-  let sidebar = document.querySelector(".sidebar");
-  let closeBtn = document.querySelector("#btn");
-  let searchBtn = document.querySelector(".bx-search");
-  closeBtn!.addEventListener("click", ()=>{
-    sidebar!.classList.toggle("open");
-    menuBtnChange();//calling the function(optional)
-  });
-  searchBtn!.addEventListener("click", ()=>{ // Sidebar open when you click on the search iocn
-    sidebar!.classList.toggle("open");
-    menuBtnChange(); //calling the function(optional)
-  });
-  // following are the code to change sidebar button(optional)
-  function menuBtnChange() {
-   if(sidebar!.classList.contains("open")){
-     closeBtn!.classList.replace("bx-menu", "bx-menu-alt-right");//replacing the iocns class
-   }else {
-     closeBtn!.classList.replace("bx-menu-alt-right","bx-menu");//replacing the iocns class
-   }
-  }
+ sideMenuIconOnClick() {
+  this.isSideMenuClosed.update(currentValue => !currentValue);
  }
 
   onThemeModeChange = (evt: Event) => {
     evt.stopPropagation();
-    // console.log('evt.clientX', evt.clientX);
-    // console.log('evt.target', evt.currentTarget);
     const target = evt.currentTarget as HTMLElement;
-    console.log('target.dataset', target.dataset);
-    console.log('target.dataset', target.dataset['currentTheme']);
     const selectedThem = target.dataset['currentTheme'];
     this.themeMode.set(selectedThem as ThemeMode);
-
-    // if (this.themeMode() === 'dark') {
-    //   this.themeMode.set('light');
-    // } else if (this.themeMode() === 'light') {
-    //   this.themeMode.set('dark');
-    // }
   };
 
 }

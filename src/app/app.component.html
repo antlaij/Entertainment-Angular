@@ -52,11 +52,11 @@
 
 <main>
   <section class="sidebar-container">
-    <div class="sidebar">
+    <div class="sidebar" [ngClass]="isSideMenuClosed() ? '' : 'open'">
       <div class="logo-details">
         <i class='bx bxl-c-plus-plus icon'></i>
         <div class="logo_name">Info.</div>
-        <i class='bx bx-menu' id="btn"></i>
+        <i [class]='menuCloseBtnClass()' id="btn" (click)="sideMenuIconOnClick()"></i>
       </div>
       <ul class="nav-list">
         <li>
