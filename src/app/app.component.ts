@@ -1,4 +1,4 @@
-import { Component, ElementRef, Renderer2, effect, signal } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, effect, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 // type ThemeMode = 'dark' | 'light' | 'os-default';
@@ -13,11 +13,20 @@ type ThemeMode = typeof ThemeMOdes[number];
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  renderer = inject(Renderer2);
+  el = inject(ElementRef);
+
   title = 'Entertainment';
   themeMode = signal<ThemeMode>('dark');
 
-  constructor(private renderer: Renderer2, private el: ElementRef) {
+  sideBarNenus = [
+    { name: 'RTHK', icon: 'bx bx-radio', link: 'rthk' },
+    { name: 'RTHK', icon: 'bx bxs-playlist', link: 'rthk' },
+    { name: 'RTHK', icon: 'bx bxs-playlist', link: 'rthk' },
+  ];
+
+  constructor() {
     // Register a new effect.
     effect(() => {
       // Get root html tag from current element
@@ -33,6 +42,29 @@ export class AppComponent {
       this.renderer.addClass(htmlTag, this.themeMode());
     });
   }
+
+  ngOnInit() {
+
+  let sidebar = document.querySelector(".sidebar");
+  let closeBtn = document.querySelector("#btn");
+  let searchBtn = document.querySelector(".bx-search");
+  closeBtn!.addEventListener("click", ()=>{
+    sidebar!.classList.toggle("open");
+    menuBtnChange();//calling the function(optional)
+  });
+  searchBtn!.addEventListener("click", ()=>{ // Sidebar open when you click on the search iocn
+    sidebar!.classList.toggle("open");
+    menuBtnChange(); //calling the function(optional)
+  });
+  // following are the code to change sidebar button(optional)
+  function menuBtnChange() {
+   if(sidebar!.classList.contains("open")){
+     closeBtn!.classList.replace("bx-menu", "bx-menu-alt-right");//replacing the iocns class
+   }else {
+     closeBtn!.classList.replace("bx-menu-alt-right","bx-menu");//replacing the iocns class
+   }
+  }
+ }
 
   onThemeModeChange = (evt: Event) => {
     evt.stopPropagation();
